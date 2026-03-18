@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# 로컬 개발 서버 (배포 불필요)
+server.js
+
+# 브로셔 원본 (참고용, 배포 제외)
+20231116_02.png
