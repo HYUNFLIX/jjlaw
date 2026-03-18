@@ -494,14 +494,7 @@
 
       <!-- Form -->
       <div class="reveal" style="transition-delay: 0.15s;">
-        <form
-          class="contact-form"
-          action="mailto:kjlawyer@gmail.com"
-          method="post"
-          enctype="text/plain"
-          id="contactForm"
-          novalidate
-        >
+        <form class="contact-form" id="contactForm" novalidate>
           <p class="eyebrow left-only" style="margin-bottom: var(--sp-md);">빠른 상담 신청</p>
 
           <div class="form-group">
@@ -528,6 +521,7 @@
           </div>
 
           <button type="submit" class="form-submit">상담 신청하기</button>
+          <div id="formMessage" class="form-message" style="display:none;"></div>
           <p class="form-disclaimer">입력하신 개인정보는 상담 목적으로만 사용되며, 제3자에게 제공되지 않습니다.</p>
         </form>
       </div>
@@ -586,11 +580,20 @@
     </div>
     <div class="footer-bottom">
       <p class="footer-copy">© 2024 변호사 구정진 법률사무소. All Rights Reserved.</p>
-      <p class="footer-site">www.jjlaw.co.kr</p>
+      <div class="footer-bottom-right">
+        <p class="footer-site">www.jjlaw.co.kr</p>
+        <a href="/admin.html" class="footer-admin-link" aria-label="관리자 페이지">관리자</a>
+      </div>
     </div>
   </div>
 </footer>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
 <script src="js/main.js"></script>
+<script src="js/contact-form.js"></script>
 </body>
 </html>

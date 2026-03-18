@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 — 구정진 법률사무소</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #050D1A;
+      --navy-mid:   #0a1f3d;
+      --navy-card:  #0d2448;
+      --gold:       #C9A84C;
+      --gold-dim:   rgba(201,168,76,0.25);
+      --white:      #f0f4ff;
+      --muted:      #8899bb;
+      --border:     rgba(201,168,76,0.18);
+      --radius:     8px;
+      --pending:    #fbbf24;
+      --reviewing:  #60a5fa;
+      --done:       #34d399;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .login-card {
+      width: 100%;
+      max-width: 400px;
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 48px 40px 40px;
+    }
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .login-logo .bar {
+      display: inline-block;
+      width: 3px;
+      height: 28px;
+      background: var(--gold);
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .login-logo .name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      vertical-align: middle;
+    }
+    .login-logo .sub {
+      display: block;
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+    .login-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .input-group {
+      margin-bottom: 16px;
+    }
+    .input-group label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-size: 0.9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-group input:focus { border-color: var(--gold); }
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: var(--gold);
+      color: #050D1A;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-login:hover { opacity: 0.88; }
+    .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+    #loginError {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: #fca5a5;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+
+    .adm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      height: 60px;
+      background: var(--navy-card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .adm-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .adm-logo .bar { width: 3px; height: 22px; background: var(--gold); border-radius: 2px; }
+    .adm-logo .badge {
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      background: var(--gold);
+      color: #050D1A;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .adm-user {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .btn-logout {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 0.78rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-logout:hover { border-color: var(--gold); color: var(--gold); }
+
+    .adm-main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 28px;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .stat-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; margin-bottom: 8px; }
+    .stat-value { font-size: 2rem; font-weight: 700; color: var(--white); }
+    .stat-value.gold  { color: var(--gold); }
+    .stat-value.blue  { color: var(--reviewing); }
+    .stat-value.green { color: var(--done); }
+
+    /* Toolbar */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .toolbar-right { margin-left: auto; }
+    #searchInput {
+      padding: 7px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-size: 0.82rem;
+      font-family: inherit;
+      width: 220px;
+      outline: none;
+    }
+    #searchInput:focus { border-color: var(--gold); }
+
+    /* Table */
+    .table-wrap {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr {
+      background: rgba(201,168,76,0.07);
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      padding: 12px 16px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-align: left;
+      white-space: nowrap;
+    }
+    td {
+      padding: 14px 16px;
+      font-size: 0.84rem;
+      border-bottom: 1px solid rgba(201,168,76,0.07);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover { background: rgba(255,255,255,0.025); }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .badge.pending   { background: rgba(251,191,36,0.15);  color: var(--pending);   border: 1px solid rgba(251,191,36,0.3); }
+    .badge.reviewing { background: rgba(96,165,250,0.15);  color: var(--reviewing); border: 1px solid rgba(96,165,250,0.3); }
+    .badge.done      { background: rgba(52,211,153,0.12);  color: var(--done);      border: 1px solid rgba(52,211,153,0.3); }
+
+    .msg-preview {
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--muted);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      border-radius: 4px;
+      border: 1px solid;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: opacity 0.15s;
+      white-space: nowrap;
+    }
+    .btn-sm:hover { opacity: 0.75; }
+    .btn-reviewing { background: rgba(96,165,250,0.1);  border-color: rgba(96,165,250,0.4);  color: var(--reviewing); }
+    .btn-done      { background: rgba(52,211,153,0.1);  border-color: rgba(52,211,153,0.4);  color: var(--done); }
+    .btn-delete    { background: rgba(239,68,68,0.08);  border-color: rgba(239,68,68,0.3);   color: #f87171; }
+    .btn-pending   { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.3);  color: var(--pending); }
+
+    /* Detail Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5,13,26,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--navy-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 560px;
+      padding: 32px;
+    }
+    .modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-field { margin-bottom: 16px; }
+    .modal-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.06em; }
+    .modal-value { font-size: 0.9rem; color: var(--white); line-height: 1.6; white-space: pre-wrap; }
+    .modal-note {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--white);
+      font-size: 0.84rem;
+      font-family: inherit;
+      resize: vertical;
+      outline: none;
+      min-height: 72px;
+    }
+    .modal-note:focus { border-color: var(--gold); }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .btn-modal {
+      flex: 1;
+      padding: 10px;
+      border-radius: var(--radius);
+      border: 1px solid;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .btn-modal:hover { opacity: 0.78; }
+    .btn-modal.save  { background: var(--gold); border-color: var(--gold); color: #050D1A; }
+    .btn-modal.del   { background: transparent; border-color: rgba(239,68,68,0.4); color: #f87171; }
+
+    #emptyState {
+      padding: 60px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      th:nth-child(5), td:nth-child(5) { display: none; }
+    }
+    @media (max-width: 600px) {
+      .adm-main { padding: 20px 16px; }
+      th:nth-child(4), td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <span class="bar"></span>
+      <span class="name">변호사 구정진 법률사무소</span>
+      <span class="sub">ADMIN CONSOLE</span>
+    </div>
+    <p class="login-title">관리자 로그인</p>
+    <div class="input-group">
+      <label>이메일</label>
+      <input type="email" id="loginEmail" placeholder="admin@example.com" />
+    </div>
+    <div class="input-group">
+      <label>비밀번호</label>
+      <input type="password" id="loginPw" placeholder="••••••••" />
+    </div>
+    <button class="btn-login" id="btnLogin">로그인</button>
+    <p id="loginError"></p>
+  </div>
+</div>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<div id="dashboard">
+
+  <header class="adm-header">
+    <div class="adm-logo">
+      <div class="bar"></div>
+      <span>구정진 법률사무소</span>
+      <span class="badge">ADMIN</span>
+    </div>
+    <div class="adm-user">
+      <span id="adminEmail"></span>
+      <button class="btn-logout" id="btnLogout">로그아웃</button>
+    </div>
+  </header>
+
+  <main class="adm-main">
+
+    <!-- 통계 -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <p class="stat-label">전체 신청</p>
+        <p class="stat-value" id="statTotal">0</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">미확인</p>
+        <p class="stat-value gold" id="statPending">0</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">확인중</p>
+        <p class="stat-value blue" id="statReviewing">0</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">처리완료</p>
+        <p class="stat-value green" id="statDone">0</p>
+      </div>
+    </div>
+
+    <!-- 필터 + 검색 -->
+    <div class="toolbar">
+      <button class="filter-btn active" data-filter="all">전체</button>
+      <button class="filter-btn" data-filter="pending">미확인</button>
+      <button class="filter-btn" data-filter="reviewing">확인중</button>
+      <button class="filter-btn" data-filter="done">처리완료</button>
+      <div class="toolbar-right">
+        <input type="text" id="searchInput" placeholder="이름 또는 연락처 검색…" />
+      </div>
+    </div>
+
+    <!-- 목록 -->
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>접수일시</th>
+            <th>이름</th>
+            <th>연락처</th>
+            <th>상담분야</th>
+            <th>내용</th>
+            <th>상태</th>
+            <th>액션</th>
+          </tr>
+        </thead>
+        <tbody id="consultList"></tbody>
+      </table>
+      <div id="emptyState" style="display:none;">접수된 상담 신청이 없습니다.</div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══════════ DETAIL MODAL ══════════ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">
+      <span>상담 신청 상세</span>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-field">
+      <p class="modal-label">이름</p>
+      <p class="modal-value" id="mName"></p>
+    </div>
+    <div class="modal-field">
+      <p class="modal-label">연락처</p>
+      <p class="modal-value" id="mPhone"></p>
+    </div>
+    <div class="modal-field">
+      <p class="modal-label">상담분야</p>
+      <p class="modal-value" id="mArea"></p>
+    </div>
+    <div class="modal-field">
+      <p class="modal-label">문의내용</p>
+      <p class="modal-value" id="mMessage"></p>
+    </div>
+    <div class="modal-field">
+      <p class="modal-label">메모 (내부용)</p>
+      <textarea class="modal-note" id="mNote" placeholder="내부 메모를 입력하세요…"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal save" id="mSave">저장</button>
+      <button class="btn-modal del"  id="mDelete">삭제</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script>
+(function () {
+
+  // ── DOM refs ──
+  const loginScreen  = document.getElementById('loginScreen');
+  const dashboard    = document.getElementById('dashboard');
+  const loginEmailEl = document.getElementById('loginEmail');
+  const loginPwEl    = document.getElementById('loginPw');
+  const btnLogin     = document.getElementById('btnLogin');
+  const loginError   = document.getElementById('loginError');
+  const btnLogout    = document.getElementById('btnLogout');
+  const adminEmailEl = document.getElementById('adminEmail');
+
+  const statTotal     = document.getElementById('statTotal');
+  const statPending   = document.getElementById('statPending');
+  const statReviewing = document.getElementById('statReviewing');
+  const statDone      = document.getElementById('statDone');
+
+  const consultList = document.getElementById('consultList');
+  const emptyState  = document.getElementById('emptyState');
+  const searchInput = document.getElementById('searchInput');
+
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalClose   = document.getElementById('modalClose');
+  const mName    = document.getElementById('mName');
+  const mPhone   = document.getElementById('mPhone');
+  const mArea    = document.getElementById('mArea');
+  const mMessage = document.getElementById('mMessage');
+  const mNote    = document.getElementById('mNote');
+  const mSave    = document.getElementById('mSave');
+  const mDelete  = document.getElementById('mDelete');
+
+  // ── State ──
+  let allDocs     = [];
+  let activeFilter = 'all';
+  let currentDocId = null;
+  let unsubscribe  = null;
+
+  // ── Auth ──
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginScreen.style.display = 'none';
+      dashboard.style.display   = 'block';
+      adminEmailEl.textContent  = user.email;
+      startListener();
+    } else {
+      loginScreen.style.display = 'flex';
+      dashboard.style.display   = 'none';
+      if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+    }
+  });
+
+  btnLogin.addEventListener('click', async () => {
+    const email = loginEmailEl.value.trim();
+    const pw    = loginPwEl.value;
+    if (!email || !pw) { loginError.textContent = '이메일과 비밀번호를 입력해주세요.'; return; }
+    btnLogin.disabled    = true;
+    btnLogin.textContent = '로그인 중…';
+    loginError.textContent = '';
+    try {
+      await auth.signInWithEmailAndPassword(email, pw);
+    } catch (e) {
+      loginError.textContent = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
+      btnLogin.disabled    = false;
+      btnLogin.textContent = '로그인';
+    }
+  });
+
+  loginPwEl.addEventListener('keydown', e => { if (e.key === 'Enter') btnLogin.click(); });
+
+  btnLogout.addEventListener('click', () => auth.signOut());
+
+  // ── Firestore listener ──
+  function startListener() {
+    unsubscribe = db.collection('consultations')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(snapshot => {
+        allDocs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        updateStats();
+        renderList();
+      });
+  }
+
+  // ── Stats ──
+  function updateStats() {
+    statTotal.textContent     = allDocs.length;
+    statPending.textContent   = allDocs.filter(d => d.status === 'pending').length;
+    statReviewing.textContent = allDocs.filter(d => d.status === 'reviewing').length;
+    statDone.textContent      = allDocs.filter(d => d.status === 'done').length;
+  }
+
+  // ── Filter ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderList();
+    });
+  });
+
+  searchInput.addEventListener('input', renderList);
+
+  // ── Render table ──
+  function renderList() {
+    const q = searchInput.value.trim().toLowerCase();
+    let docs = allDocs;
+
+    if (activeFilter !== 'all') docs = docs.filter(d => d.status === activeFilter);
+    if (q) docs = docs.filter(d =>
+      (d.name  || '').toLowerCase().includes(q) ||
+      (d.phone || '').toLowerCase().includes(q)
+    );
+
+    consultList.innerHTML = '';
+
+    if (docs.length === 0) {
+      emptyState.style.display = 'block';
+      return;
+    }
+    emptyState.style.display = 'none';
+
+    docs.forEach(doc => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${formatDate(doc.createdAt)}</td>
+        <td><strong>${esc(doc.name)}</strong></td>
+        <td>${esc(doc.phone)}</td>
+        <td>${esc(doc.area)}</td>
+        <td class="msg-preview">${esc(doc.message)}</td>
+        <td>${statusBadge(doc.status)}</td>
+        <td>
+          <div class="action-row">
+            <button class="btn-sm btn-sm--detail" data-id="${doc.id}">상세</button>
+            ${doc.status !== 'reviewing' ? `<button class="btn-sm btn-reviewing" data-id="${doc.id}" data-action="reviewing">확인중</button>` : ''}
+            ${doc.status !== 'done'      ? `<button class="btn-sm btn-done"      data-id="${doc.id}" data-action="done">완료</button>`     : ''}
+            ${doc.status !== 'pending'   ? `<button class="btn-sm btn-pending"   data-id="${doc.id}" data-action="pending">미확인</button>` : ''}
+          </div>
+        </td>
+      `;
+      // Detail
+      tr.querySelector('.btn-sm--detail').addEventListener('click', () => openModal(doc));
+      // Status buttons
+      tr.querySelectorAll('[data-action]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          updateStatus(btn.dataset.id, btn.dataset.action);
+        });
+      });
+      consultList.appendChild(tr);
+    });
+  }
+
+  // ── Status update ──
+  function updateStatus(id, status) {
+    db.collection('consultations').doc(id).update({ status });
+  }
+
+  // ── Modal ──
+  function openModal(doc) {
+    currentDocId  = doc.id;
+    mName.textContent    = doc.name    || '';
+    mPhone.textContent   = doc.phone   || '';
+    mArea.textContent    = doc.area    || '';
+    mMessage.textContent = doc.message || '';
+    mNote.value          = doc.note    || '';
+    modalOverlay.classList.add('open');
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  function closeModal() {
+    modalOverlay.classList.remove('open');
+    currentDocId = null;
+  }
+
+  mSave.addEventListener('click', async () => {
+    if (!currentDocId) return;
+    await db.collection('consultations').doc(currentDocId).update({ note: mNote.value });
+    closeModal();
+  });
+
+  mDelete.addEventListener('click', async () => {
+    if (!currentDocId) return;
+    if (!confirm('이 상담 신청을 삭제하시겠습니까?')) return;
+    await db.collection('consultations').doc(currentDocId).delete();
+    closeModal();
+  });
+
+  // ── Helpers ──
+  function statusBadge(s) {
+    const map = { pending: '미확인', reviewing: '확인중', done: '처리완료' };
+    return `<span class="badge ${s}">${map[s] || s}</span>`;
+  }
+
+  function formatDate(ts) {
+    if (!ts) return '-';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })
+      + ' ' + d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function esc(str) {
+    return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+})();
+</script>
+</body>
+</html>
