@@ -231,6 +231,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   padding: 0 var(--sp-lg);
+  background: linear-gradient(to bottom, rgba(5, 13, 26, 0.7), rgba(5, 13, 26, 0));
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -284,45 +285,81 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: var(--sp-lg);
+  gap: 4px;
 }
 
+/* 텍스트 링크 — 버튼과 같은 높이의 박스로 만들어 수직 정렬을 맞춤 */
 .nav-links a {
-  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--white-muted);
-  transition: color var(--transition);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.82);
   position: relative;
-  padding-bottom: 4px;
+  transition: color var(--transition);
 }
 
 .nav-links a::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 0;
-  width: 0; height: 1px;
+  left: 14px; right: 14px;
+  bottom: 6px;
+  height: 1px;
   background: var(--gold);
-  transition: width var(--transition);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
 }
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: var(--white);
+  color: #fff;
 }
 
 .nav-links a:hover::after,
 .nav-links a.active::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
-/* btn-gold-sm은 nav-links a 색상 상속을 덮어써야 함 */
+/* CTA 버튼 — 링크 그룹과 구분선으로 분리 */
 .nav-links .btn-gold-sm {
-  color: var(--navy-darkest);
+  height: 40px;
+  padding: 0 22px;
+  margin-left: 20px;
+  font-size: 0.875rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--navy-darkest);
+  background: var(--gold);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 12px rgba(201, 168, 76, 0.25);
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.nav-links .btn-gold-sm::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  width: 1px;
+  height: 22px;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .nav-links .btn-gold-sm::after {
   display: none;
+}
+
+.nav-links .btn-gold-sm:hover {
+  background: var(--gold-light);
+  box-shadow: 0 4px 18px rgba(201, 168, 76, 0.4);
+  transform: translateY(-1px);
+  color: var(--navy-darkest);
 }
 
 /* Hamburger */
