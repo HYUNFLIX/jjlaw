@@ -20,7 +20,7 @@ fi
 rm -f site.zip
 python - <<'PY'
 import zipfile, os
-files = ['index.html','photo.jpg'] + [os.path.join(d,f) for d in ('css','js','assets') for f in os.listdir(d)]
+files = ['index.html','photo.jpg','robots.txt','sitemap.xml','favicon.ico'] + [os.path.join(d,f) for d in ('css','js','assets') for f in os.listdir(d)]
 with zipfile.ZipFile('site.zip','w',zipfile.ZIP_DEFLATED) as z:
     for f in files: z.write(f, f.replace(os.sep,'/'))
 print('packaged', len(files), 'files')

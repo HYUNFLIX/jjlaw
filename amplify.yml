@@ -11,6 +11,9 @@ frontend:
       - css/**/*
       - js/**/*
       - photo.jpg
+      - robots.txt
+      - sitemap.xml
+      - favicon.ico
       - assets/**/*
   cache:
     paths: []

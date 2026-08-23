@@ -587,6 +587,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 /* Credential strip */
+.hero-edu-sub {
+  display: block;
+  font-size: 0.8em;
+  font-weight: 300;
+  color: var(--white-muted);
+  margin-top: 2px;
+}
+
 .hero-cred-strip {
   display: flex;
   align-items: center;
@@ -695,6 +703,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--gold);
   line-height: 1;
   text-shadow: 0 0 20px rgba(201, 168, 76, 0.3);
+}
+
+.pstrip-num.pstrip-text {
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  letter-spacing: 0.04em;
+}
+
+.pstrip-plus {
+  font-size: 0.6em;
+  vertical-align: top;
+  margin-left: 2px;
 }
 
 .pstrip-label {
@@ -898,9 +917,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .edu-icon {
-  font-size: 1.1rem;
+  width: 38px;
+  height: 38px;
   flex-shrink: 0;
-  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold-border);
+  border-radius: 50%;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.06);
+}
+
+.edu-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 .edu-text strong {
@@ -1295,8 +1326,21 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .career-award-icon {
-  font-size: 1.8rem;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold-border);
+  border-radius: 50%;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.career-award-icon svg {
+  width: 26px;
+  height: 26px;
 }
 
 .career-award-text {
@@ -1923,4 +1967,14 @@ footer {
   .career-panel {
     padding: var(--sp-md);
   }
+}
+
+/* 모션 최소화 설정 존중 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal, .reveal-left, .reveal-right { opacity: 1; transform: none; }
 }
