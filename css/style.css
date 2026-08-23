@@ -969,8 +969,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 /* Thesis featured card */
+.thesis-card .panel-art {
+  width: 220px;
+  right: -10px;
+  bottom: -50px;
+}
+
 .thesis-card {
   position: relative;
+  isolation: isolate;
   padding: var(--sp-md) var(--sp-lg);
   background: linear-gradient(135deg,
     rgba(201, 168, 76, 0.10) 0%,
@@ -1288,37 +1295,89 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .career-panel {
-  background: linear-gradient(160deg, var(--navy-mid) 0%, var(--navy-dark) 100%);
-  border: 1px solid var(--gold-border);
+  background: linear-gradient(160deg, var(--navy-light) 0%, var(--navy-mid) 60%);
+  border: 1px solid rgba(201, 168, 76, 0.16);
   border-radius: var(--radius-lg);
-  padding: var(--sp-lg);
+  padding: 40px 36px 36px;
   display: flex;
   flex-direction: column;
   gap: var(--sp-md);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.career-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.5;
+}
+
+.career-panel:hover {
+  border-color: rgba(201, 168, 76, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+/* 공통: 패널 배경 라인아트 + 영문 라벨 */
+.panel-art {
+  position: absolute;
+  right: -30px;
+  bottom: -24px;
+  width: 300px;
+  height: auto;
+  color: var(--gold);
+  opacity: 0.08;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+.career-panel:hover .panel-art,
+.contact-info:hover .panel-art,
+.thesis-card:hover .panel-art,
+.career-award-inner:hover .panel-art {
+  opacity: 0.15;
+}
+
+.panel-en {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 6px;
 }
 
 .career-panel-hd {
   display: flex;
   align-items: center;
-  gap: var(--sp-sm);
-  padding-bottom: var(--sp-sm);
-  border-bottom: 1px solid var(--gold-border);
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.14);
 }
 
 .career-panel-hd h3 {
   font-family: var(--font-serif);
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: var(--white);
-  letter-spacing: 0.05em;
+  line-height: 1.1;
 }
+
+.career-panel-hd .panel-en {
+  margin-bottom: 4px;
+}
+
 
 .career-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   font-size: 0.8rem;
   font-weight: 700;
@@ -1341,35 +1400,41 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .career-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
 }
 
 .career-list li {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-size: 0.88rem;
-  color: var(--white-muted);
-  padding-left: 14px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 9px 0 9px 26px;
   position: relative;
   line-height: 1.5;
   word-break: keep-all;
+  letter-spacing: 0.01em;
+}
+
+.career-list li + li {
+  border-top: 1px dashed rgba(255, 255, 255, 0.06);
 }
 
 .career-list li::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--gold-border);
+  top: 20px;
+  width: 14px;
+  height: 1px;
+  background: var(--gold);
 }
 
 .career-list-sub {
-  font-size: 0.78rem;
-  color: var(--white-dim);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--white-muted);
 }
 
 /* Award Strip */
@@ -1378,11 +1443,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   margin: 0 auto;
 }
 
+.career-award-inner .panel-art {
+  width: 200px;
+  right: 20px;
+  bottom: -60px;
+}
+
 .career-award-inner {
   display: flex;
   align-items: center;
   gap: var(--sp-md);
   padding: var(--sp-md) var(--sp-lg);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   background: linear-gradient(135deg, rgba(201, 168, 76, 0.1), rgba(201, 168, 76, 0.04));
   border: 1px solid var(--gold-border);
   border-left: 4px solid var(--gold);
@@ -1466,6 +1540,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: var(--sp-md);
 }
 
+.cta-eyebrow {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
 .cta-quote {
   font-family: 'Georgia', serif;
   font-size: 5rem;
@@ -1543,13 +1622,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   flex-direction: column;
   gap: var(--sp-md);
+  padding: 36px 32px;
+  background: linear-gradient(160deg, var(--navy-light) 0%, var(--navy-mid) 60%);
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.contact-info .panel-en {
+  margin-bottom: -12px;
+}
+
+.contact-form-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: var(--sp-md);
 }
 
 .contact-office-name {
   font-family: var(--font-serif);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--gold);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
   margin-bottom: var(--sp-xs);
 }
 
@@ -1583,6 +1681,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   flex-direction: column;
   gap: var(--sp-sm);
+  padding: 36px 32px;
+  background: linear-gradient(160deg, var(--navy-light) 0%, var(--navy-mid) 60%);
+  border: 1px solid rgba(201, 168, 76, 0.16);
+  border-radius: var(--radius-lg);
 }
 
 .form-group {
