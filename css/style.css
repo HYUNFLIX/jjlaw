@@ -688,17 +688,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .pstrip-item {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 0 var(--sp-lg);
+  padding: 0 var(--sp-md);
   text-align: center;
 }
 
 .pstrip-num {
   font-family: var(--font-serif);
   font-size: clamp(2rem, 3.5vw, 3rem);
+  white-space: nowrap;
   font-weight: 700;
   color: var(--gold);
   line-height: 1;
@@ -778,6 +780,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .sidebar-portrait {
   width: 100%;
+  height: auto;
   aspect-ratio: 3/4;
   object-fit: cover;
   object-position: 50% 15%;
