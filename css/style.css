@@ -1114,17 +1114,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 
 .practice-card {
-  background: var(--navy-mid);
-  border: 1px solid rgba(201, 168, 76, 0.13);
+  background: linear-gradient(160deg, var(--navy-light) 0%, var(--navy-mid) 60%);
+  border: 1px solid rgba(201, 168, 76, 0.16);
   border-radius: var(--radius-lg);
-  padding: 40px 32px;
+  padding: 40px 36px 36px;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-md);
-  transition: var(--transition);
-  cursor: default;
   position: relative;
   overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
 .practice-card::before {
@@ -1133,19 +1132,53 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   top: 0; left: 0; right: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  opacity: 0;
+  opacity: 0.5;
   transition: opacity var(--transition);
 }
 
 .practice-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--gold-border);
-  box-shadow: var(--shadow-gold), 0 20px 60px rgba(0, 0, 0, 0.5);
-  background: var(--navy-light);
+  transform: translateY(-8px);
+  border-color: rgba(201, 168, 76, 0.45);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(201, 168, 76, 0.08);
 }
 
 .practice-card:hover::before {
   opacity: 1;
+}
+
+/* 배경 일러스트 — 골드 라인 아트 */
+.practice-art {
+  position: absolute;
+  right: -30px;
+  bottom: -24px;
+  width: 300px;
+  height: auto;
+  color: var(--gold);
+  opacity: 0.09;
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity var(--transition), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.practice-card:hover .practice-art {
+  opacity: 0.16;
+  transform: translate(-6px, -6px) scale(1.03);
+}
+
+.practice-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.practice-num {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  opacity: 0.85;
 }
 
 .practice-icon {
@@ -1154,14 +1187,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.06));
+  background: rgba(201, 168, 76, 0.08);
   border-radius: var(--radius-md);
   border: 1px solid var(--gold-border);
-  transition: box-shadow var(--transition);
+  transition: box-shadow var(--transition), background var(--transition);
 }
 
 .practice-card:hover .practice-icon {
-  box-shadow: 0 0 18px rgba(201, 168, 76, 0.3);
+  background: rgba(201, 168, 76, 0.14);
+  box-shadow: 0 0 22px rgba(201, 168, 76, 0.25);
 }
 
 .practice-icon svg {
@@ -1174,39 +1208,66 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   stroke-linejoin: round;
 }
 
+.practice-en {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
 .practice-title {
   font-family: var(--font-serif);
-  font-size: 1.45rem;
+  font-size: 1.85rem;
   font-weight: 700;
   color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.practice-desc {
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--white-muted);
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.14);
+  word-break: keep-all;
 }
 
 .practice-items {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
 }
 
 .practice-items li {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.88rem;
-  color: var(--white-muted);
-  transition: color var(--transition);
+  gap: 12px;
+  padding: 9px 0;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.01em;
+  word-break: keep-all;
+}
+
+.practice-items li + li {
+  border-top: 1px dashed rgba(255, 255, 255, 0.06);
 }
 
 .practice-items li::before {
   content: '';
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
+  width: 14px;
+  height: 1px;
   background: var(--gold);
   flex-shrink: 0;
+  transition: width var(--transition);
 }
 
-.practice-card:hover .practice-items li {
-  color: var(--white);
+.practice-card:hover .practice-items li::before {
+  width: 20px;
 }
 
 /* ============================================
@@ -1953,6 +2014,11 @@ footer {
 
 @media (max-width: 480px) {
   #hero, #about, #practice, #career, #cta-banner, #contact {
+    padding-left: var(--sp-sm);
+    padding-right: var(--sp-sm);
+  }
+
+  .container {
     padding-left: var(--sp-sm);
     padding-right: var(--sp-sm);
   }
