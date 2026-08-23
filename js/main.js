@@ -1,6 +1,7 @@
 /**
  * 구정진 변호사 법률사무소 - Main JS
- * Handles: navigation, scroll animations, counters, mobile menu
+ * Handles: navigation, scroll animations, mobile menu
+ * (contact form submission lives in contact-form.js)
  */
 
 (function () {
@@ -86,41 +87,7 @@
   revealEls.forEach(el => revealObserver.observe(el));
 
   /* ============================================================
-     4. COUNTER ANIMATION
-  ============================================================ */
-  const counterEls = document.querySelectorAll('.stat-number[data-target]');
-
-  function animateCounter(el) {
-    const target = parseInt(el.dataset.target, 10);
-    const suffix = el.dataset.suffix || '';
-    const duration = 1600;
-    const startTime = performance.now();
-
-    function update(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * target) + suffix;
-      if (progress < 1) requestAnimationFrame(update);
-    }
-
-    requestAnimationFrame(update);
-  }
-
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateCounter(entry.target);
-        counterObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  counterEls.forEach(el => counterObserver.observe(el));
-
-  /* ============================================================
-     5. SCROLL INDICATOR — hide on scroll
+     4. SCROLL INDICATOR — hide on scroll
   ============================================================ */
   const scrollIndicator = document.querySelector('.scroll-indicator');
   if (scrollIndicator) {
@@ -130,7 +97,7 @@
   }
 
   /* ============================================================
-     6. PRACTICE CARD SUBTLE 3D TILT
+     5. PRACTICE CARD SUBTLE 3D TILT
   ============================================================ */
   const cards = document.querySelectorAll('.practice-card');
 
@@ -148,7 +115,7 @@
   });
 
   /* ============================================================
-     7. SMOOTH SCROLL for all anchor links
+     6. SMOOTH SCROLL for all anchor links
   ============================================================ */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
@@ -161,24 +128,9 @@
   });
 
   /* ============================================================
-     8. CONTACT FORM — basic validation + feedback
+     7. FOOTER YEAR
   ============================================================ */
-  const form = document.getElementById('contactForm');
-  if (form) {
-    form.addEventListener('submit', e => {
-      const name = form.querySelector('#name').value.trim();
-      const phone = form.querySelector('#phone').value.trim();
-      const message = form.querySelector('#message').value.trim();
-
-      if (!name || !phone || !message) {
-        e.preventDefault();
-        alert('이름, 연락처, 문의 내용은 필수 항목입니다.');
-        return;
-      }
-
-      // mailto fallback: the default browser mailto behavior fires
-      // Optional: show a brief confirmation before navigating
-    });
-  }
+  const yearEl = document.getElementById('footerYear');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 })();

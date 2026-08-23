@@ -1658,6 +1658,33 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   filter: grayscale(30%) brightness(0.85) contrast(1.1);
 }
 
+.map-links {
+  display: flex;
+  gap: var(--sp-sm);
+}
+
+.map-links a {
+  flex: 1;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 8px 0;
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-md);
+  color: var(--gold);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.map-links a:hover {
+  background: var(--gold);
+  color: var(--navy-darkest);
+}
+
+.contact-sub {
+  font-size: 0.8rem;
+  color: var(--white-dim);
+}
+
 .map-hours {
   background: var(--navy-mid);
   border: 1px solid var(--gold-border);
@@ -1735,6 +1762,18 @@ footer {
   gap: var(--sp-sm);
   padding-top: var(--sp-md);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-firm {
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: var(--white-dim);
+  margin-bottom: var(--sp-sm);
+}
+
+.footer-firm a {
+  color: var(--gold-dark);
+  text-decoration: none;
 }
 
 .footer-copy {
