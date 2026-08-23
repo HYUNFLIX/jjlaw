@@ -8,7 +8,7 @@ FN="jjlaw-contact-mailer"
 ROLE="jjlaw-contact-mailer-role"
 TO_EMAIL="kjjlawyer@gmail.com"
 FROM_EMAIL="kjjlawyer@gmail.com"
-ALLOWED_ORIGINS="https://www.jjlaw.co.kr,https://jjlaw.co.kr,http://localhost:3001"
+ALLOWED_ORIGINS="https://www.jjlaw.co.kr,https://jjlaw.co.kr,https://main.d20m5woshwnwmo.amplifyapp.com,http://localhost:3001"
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 
