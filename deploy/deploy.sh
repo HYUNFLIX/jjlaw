@@ -29,7 +29,7 @@ ROLE_ARN="arn:aws:iam::${ACCOUNT}:role/${ROLE}"
 rm -f lambda.zip; python -c "import zipfile; zipfile.ZipFile('lambda.zip','w',zipfile.ZIP_DEFLATED).write('lambda/index.mjs','index.mjs')"
 
 # 4. 함수 생성/갱신
-ENV="Variables={TO_EMAIL=$TO_EMAIL,FROM_EMAIL=$FROM_EMAIL,ALLOWED_ORIGINS=$ALLOWED_ORIGINS}"
+ENV="{\"Variables\":{\"TO_EMAIL\":\"$TO_EMAIL\",\"FROM_EMAIL\":\"$FROM_EMAIL\",\"ALLOWED_ORIGINS\":\"$ALLOWED_ORIGINS\"}}"
 if aws lambda get-function --region "$REGION" --function-name "$FN" >/dev/null 2>&1; then
   aws lambda update-function-code --region "$REGION" --function-name "$FN" --zip-file fileb://lambda.zip >/dev/null
   aws lambda wait function-updated --region "$REGION" --function-name "$FN"
@@ -43,6 +43,7 @@ fi
 # 5. Function URL (공개, CORS는 코드에서 처리)
 aws lambda add-permission --region "$REGION" --function-name "$FN" --statement-id public-url \
   --action lambda:InvokeFunctionUrl --principal '*' --function-url-auth-type NONE >/dev/null 2>&1 || true
+aws lambda add-permission --region "$REGION" --function-name "$FN" --statement-id public-invoke   --action lambda:InvokeFunction --principal '*' >/dev/null 2>&1 || true
 URL=$(aws lambda create-function-url-config --region "$REGION" --function-name "$FN" --auth-type NONE --query FunctionUrl --output text 2>/dev/null \
    || aws lambda get-function-url-config --region "$REGION" --function-name "$FN" --query FunctionUrl --output text)
 
