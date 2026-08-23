@@ -1680,6 +1680,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--navy-darkest);
 }
 
+/* honeypot — 사람에게는 보이지 않음 */
+.form-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .contact-sub {
   font-size: 0.8rem;
   color: var(--white-dim);
@@ -1793,23 +1802,6 @@ footer {
   gap: var(--sp-md);
 }
 
-.footer-admin-link {
-  font-size: 0.75rem;
-  padding: 4px 10px;
-  border: 1px solid rgba(201, 168, 76, 0.3);
-  border-radius: 4px;
-  color: var(--gold-dark);
-  text-decoration: none;
-  transition: all 0.2s;
-  letter-spacing: 0.06em;
-  font-weight: 500;
-}
-
-.footer-admin-link:hover {
-  background: rgba(201, 168, 76, 0.1);
-  border-color: var(--gold);
-  color: var(--gold);
-}
 
 /* ============================================
    UTILITY

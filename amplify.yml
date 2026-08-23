@@ -8,7 +8,6 @@ frontend:
     baseDirectory: /
     files:
       - index.html
-      - admin.html
       - css/**/*
       - js/**/*
       - photo.jpg
